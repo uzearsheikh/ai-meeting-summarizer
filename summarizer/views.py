@@ -26,10 +26,8 @@ from .models import Feedback
 
 
 def index(request):
-
-    feedbacks = Feedback.objects.all()[:6]
-
-    return render(request, "index.html", {"feedbacks": feedbacks})
+    feedbacks = []
+    return render(request,"index.html",{"feedbacks":feedbacks})
 
 
 def feedback(request):
