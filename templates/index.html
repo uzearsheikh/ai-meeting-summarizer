@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Meeting Assistant</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins;
+}
+
+body{
+
+background:linear-gradient(135deg,#1f1c2c,#928dab);
+min-height:100vh;
+color:white;
+
+}
+
+/* navbar */
+
+.navbar{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:20px 80px;
+
+}
+
+.logo{
+
+font-size:22px;
+font-weight:600;
+
+}
+
+.feedback-btn{
+
+padding:10px 20px;
+border:none;
+
+background:white;
+color:black;
+
+border-radius:6px;
+
+cursor:pointer;
+
+transition:0.3s;
+
+}
+
+.feedback-btn:hover{
+
+transform:scale(1.1);
+
+}
+
+/* hero */
+
+.hero{
+
+text-align:center;
+padding:80px 20px;
+
+}
+
+.hero h1{
+
+font-size:42px;
+margin-bottom:20px;
+
+}
+
+.hero p{
+
+opacity:0.8;
+margin-bottom:30px;
+
+}
+
+/* glass form */
+
+.form-box{
+
+width:600px;
+
+margin:auto;
+
+background:rgba(255,255,255,0.1);
+
+backdrop-filter:blur(15px);
+
+padding:30px;
+
+border-radius:15px;
+
+box-shadow:0 10px 40px rgba(0,0,0,0.4);
+
+}
+
+/* upload */
+
+.upload{
+
+margin-bottom:20px;
+
+}
+
+/* textarea */
+
+textarea{
+
+width:100%;
+height:140px;
+
+padding:15px;
+
+border:none;
+
+border-radius:8px;
+
+margin-bottom:20px;
+
+}
+
+/* button */
+
+button{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:8px;
+
+background:linear-gradient(90deg,#ff9966,#ff5e62);
+
+color:white;
+
+font-size:16px;
+
+cursor:pointer;
+
+transition:0.3s;
+
+}
+
+button:hover{
+
+transform:scale(1.05);
+
+}
+
+/* summary */
+
+.summary{
+
+margin-top:20px;
+
+background:white;
+color:black;
+
+padding:20px;
+
+border-radius:10px;
+
+}
+
+/* feedback section */
+
+.feedback-section{
+
+padding:80px;
+
+text-align:center;
+
+}
+
+/* carousel */
+
+.carousel{
+
+display:flex;
+
+overflow:hidden;
+
+width:900px;
+
+margin:auto;
+
+}
+
+/* card */
+
+.card{
+
+min-width:260px;
+
+margin:20px;
+
+background:rgba(255,255,255,0.1);
+
+backdrop-filter:blur(10px);
+
+padding:25px;
+
+border-radius:15px;
+
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+
+transition:0.4s;
+
+}
+
+/* 3d hover */
+
+.card:hover{
+
+transform:rotateY(8deg) translateY(-10px);
+
+}
+
+/* avatar */
+
+.avatar{
+
+width:60px;
+height:60px;
+
+border-radius:50%;
+
+margin-bottom:10px;
+
+}
+
+/* stars */
+
+.star{
+
+color:gold;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- navbar -->
+
+<div class="navbar">
+
+<div class="logo">AI Meeting Assistant</div>
+
+<a href="/feedback">
+
+<button class="feedback-btn">Give Feedback</button>
+
+</a>
+
+</div>
+
+<!-- hero -->
+
+<section class="hero">
+
+<h1>Summarize Your Meetings Instantly</h1>
+
+<p>Upload meeting recording or paste transcript to generate AI summary.</p>
+
+
+<div class="form-box">
+
+<form method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+<div class="upload">
+
+<input type="file" name="audio">
+
+</div>
+
+<textarea name="transcript" placeholder="Or paste meeting transcript here..."></textarea>
+
+<button type="submit">Generate Summary</button>
+
+</form>
+
+
+{% if summary %}
+
+<div class="summary">
+
+<h3>Meeting Summary</h3>
+
+<p>{{summary}}</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</section>
+
+<!-- feedback -->
+
+<section class="feedback-section">
+
+<h2>User Feedback</h2>
+
+<div class="carousel" id="carousel">
+
+{% for fb in feedbacks %}
+
+<div class="card">
+
+<img class="avatar" src="https://i.pravatar.cc/100?img={{forloop.counter}}">
+
+<p>{{fb.message}}</p>
+
+<p>
+
+{% for i in "12345" %}
+
+{% if forloop.counter <= fb.rating %}
+
+<span class="star">⭐</span>
+
+{% endif %}
+
+{% endfor %}
+
+</p>
+
+<strong>{{fb.name}}</strong>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</section>
+
+<script>
+
+/* auto carousel */
+
+let carousel=document.getElementById("carousel")
+
+let scroll=0
+
+setInterval(()=>{
+
+scroll+=280
+
+if(scroll>carousel.scrollWidth){
+
+scroll=0
+
+}
+
+carousel.scrollTo({
+
+left:scroll,
+
+behavior:"smooth"
+
+})
+
+},3000)
+
+</script>
+
+</body>
+</html>
